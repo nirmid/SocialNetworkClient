@@ -32,11 +32,13 @@ public:
     // Read an ascii line from the server
     // Returns false in case connection closed before a newline can be read.
     bool getLine(std::string& line);
+
 	
 	// Send an ascii line from the server
     // Returns false in case connection closed before all the data is sent.
     bool sendLine(std::string& line);
- 
+
+
     // Get Ascii data from the server until the delimiter character
     // Returns false in case connection closed before null can be read.
     bool getFrameAscii(std::string& frame, char delimiter);
@@ -47,7 +49,16 @@ public:
 	
     // Close down the connection properly.
     void close();
- 
+
+    short bytesToShort(char* bytesArr);
+
+    void shortToBytes(short num, char* bytesArr);
+
+    std::string encode(std::string& line);
+
+    std::string decode(std::string& line);
+
+
 }; //class ConnectionHandler
  
 #endif

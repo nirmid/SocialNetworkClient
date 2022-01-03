@@ -1,4 +1,4 @@
-#include <connectionHandler.h>
+#include "../include/connectionHandler.h"
  
 using boost::asio::ip::tcp;
 
@@ -63,12 +63,13 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
     return true;
 }
  
-bool ConnectionHandler::getLine(std::string& line) {
-    return getFrameAscii(line, '\n');
+bool ConnectionHandler::getLine(std::string& line) { // need to decode message from server
+    return getFrameAscii(line, ';');
 }
 
-bool ConnectionHandler::sendLine(std::string& line) {
-    return sendFrameAscii(line, '\n');
+
+bool ConnectionHandler::sendLine(std::string& line) { // need to encode massage
+    return sendFrameAscii(line, ';');
 }
  
 bool ConnectionHandler::getFrameAscii(std::string& frame, char delimiter) {
@@ -100,4 +101,26 @@ void ConnectionHandler::close() {
     } catch (...) {
         std::cout << "closing failed: connection already closed" << std::endl;
     }
+}
+
+short ConnectionHandler::bytesToShort(char *bytesArr)
+{
+    short result = (short)((bytesArr[0] & 0xff) << 8);
+    result += (short)(bytesArr[1] & 0xff);
+    return result;
+}
+
+void ConnectionHandler::shortToBytes(short num, char *bytesArr) {
+    bytesArr[0] = ((num >> 8) & 0xFF);
+    bytesArr[1] = (num & 0xFF);
+}
+
+std::string ConnectionHandler::decode(std::string &line) {
+
+}
+
+std::string ConnectionHandler::encode(std::string &line) {
+    char opcodeB[2];
+    short opcode,command;
+
 }
