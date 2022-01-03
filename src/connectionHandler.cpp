@@ -7,6 +7,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 using std::string;
+using namespace std;
  
 ConnectionHandler::ConnectionHandler(string host, short port): host_(host), port_(port), io_service_(), socket_(io_service_){}
     
@@ -120,7 +121,6 @@ std::string ConnectionHandler::decode(std::string &line) {
 }
 
 std::string ConnectionHandler::encode(std::string &line) {
-    char opcodeB[2];
-    short opcode,command;
+    vector<string> input;
 
 }
