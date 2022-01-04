@@ -58,6 +58,10 @@ public:
 
     std::string decode(std::string& line);
 
+    int copyIntoMsg(char *msg, const char *toCopy, int index, int length);
+
+    std::string getTime();
+
 
 }; //class ConnectionHandler
  
