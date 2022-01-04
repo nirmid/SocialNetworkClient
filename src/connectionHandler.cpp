@@ -114,9 +114,7 @@ short ConnectionHandler::bytesToShort(char *bytesArr)
 }
 
 
-std::string ConnectionHandler::decode(std::string &line) {
 
-}
 
 
 
