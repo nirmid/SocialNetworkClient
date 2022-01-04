@@ -12,6 +12,7 @@ public:
     void decode();
 
 private:
+    co
     char encBuf;
     char decBuf;
 };

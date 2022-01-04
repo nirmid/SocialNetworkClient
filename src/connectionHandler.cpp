@@ -298,6 +298,11 @@ int ConnectionHandler::copyIntoMsg(char *msg, const char *toCopy, int index, int
     }
 }
 
+
+void decode(){
+
+}
+
 std::string ConnectionHandler::getTime() {
     time_t now = time(0);
     tm *ltm = localtime(&now);
