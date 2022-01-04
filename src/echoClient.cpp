@@ -17,6 +17,8 @@ int main (int argc, char *argv[]) {
         std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
         return 1;
     }
+
+
 	
 	//From here we will see the rest of the ehco client implementation:
     while (1) {
