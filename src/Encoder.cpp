@@ -176,10 +176,16 @@ void Encoder::operator()() {
             case null:
                 break;
         }
+        connectionHandler.close();
     }
 
 
 
+}
+
+void Encoder::shortToBytes(short num, char *bytesArr) {
+    bytesArr[0] = ((num >> 8) & 0xFF);
+    bytesArr[1] = (num & 0xFF);
 }
 
 int Encoder::copyIntoMsg(char *msg, const char *toCopy, int index, int length) {
