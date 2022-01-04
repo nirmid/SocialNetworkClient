@@ -4,7 +4,7 @@ SRCS = $(wildcard ./src/*.cpp)
 OBJS = $(patsubst ./src/%.cpp,./bin/%.o, $(SRCS))
 DEPS := $(patsubst %.o,%.d, $(OBJS))
 all: EchoClient
-	g++ -o bin/echo.elf bin/connectionHandler.o bin/echoClient.o bin/readFromServer.o bin/keyboardInput.o $(LDFLAGS)
+	g++ -o bin/echo.elf bin/connectionHandler.o bin/echoClient.o bin/Encoder.o bin/decoder.o $(LDFLAGS)
 
 EchoClient: bin/connectionHandler.o bin/echoClient.o bin/Encoder.o bin/decoder.o
 

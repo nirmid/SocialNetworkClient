@@ -47,7 +47,7 @@ void Encoder::operator()() {
                 string password = input.at(2);
                 const char *usernameB = input.at(1).c_str();
                 const char *passwordB = input.at(2).c_str();
-                char msg[2 + username.length() + 1 + password.length() + 1];
+                char msg[2 + username.length() + 1 + password.length() + 1+1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(1, opcode);
@@ -56,6 +56,7 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 index = copyIntoMsg(msg, passwordB, index, password.length());
                 msg[index++] = '\0';
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
@@ -64,7 +65,7 @@ void Encoder::operator()() {
                 string password = input.at(2);
                 const char *usernameB = input.at(1).c_str();
                 const char *passwordB = input.at(2).c_str();
-                char msg[2 + username.length() + 1 + password.length() + 1 + 1];
+                char msg[2 + username.length() + 1 + password.length() + 1 + 1 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(2, opcode);
@@ -75,15 +76,17 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 const char *captcha = input.at(3).c_str();
                 msg[index++] = captcha[0];
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
             case logout: {
-                char msg[2];
+                char msg[2 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(3, opcode);
                 index = copyIntoMsg(msg, opcode, index, 2);
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 unique_lock<mutex> uniqueLock(mtx);
                 cv.wait(uniqueLock);
@@ -92,7 +95,7 @@ void Encoder::operator()() {
             case follow: {
                 string username = input.at(2);
                 const char *usernameB = username.c_str();
-                char msg[2 + 1 + username.length()];
+                char msg[2 + 1 + username.length() + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(4, opcode);
@@ -101,19 +104,21 @@ void Encoder::operator()() {
                 const char *commandB = command.c_str();
                 index = copyIntoMsg(msg, commandB, index, 1);
                 index = copyIntoMsg(msg, usernameB, index, username.length());
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
             case post: {
                 string content = input.at(1);
                 const char *contentB = content.c_str();
-                char msg[2 + content.length() + 1];
+                char msg[2 + content.length() + 1 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(5, opcode);
                 index = copyIntoMsg(msg, opcode, index, 2);
                 index = copyIntoMsg(msg, contentB, index, content.length());
                 msg[index++] = '\0';
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
@@ -124,7 +129,7 @@ void Encoder::operator()() {
                 const char *usernameB = username.c_str();
                 const char *contentB = content.c_str();
                 const char *dateB = date.c_str();
-                char msg[2 + username.length() + 1 + content.length() + 1 + date.length() + 1];
+                char msg[2 + username.length() + 1 + content.length() + 1 + date.length() + 1 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(6, opcode);
@@ -135,41 +140,45 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 index = copyIntoMsg(msg, dateB, index, date.length());
                 msg[index++] = '\0';
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
             case LOGSTAT: {
-                char msg[2];
+                char msg[2 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(7, opcode);
                 index = copyIntoMsg(msg, opcode, index, 2);
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
             case STAT: {
                 string username = input.at(1);
                 const char *usernameB = username.c_str();
-                char msg[2 + username.length() + 1];
+                char msg[2 + username.length() + 1 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(8, opcode);
                 index = copyIntoMsg(msg, opcode, index, 2);
                 index = copyIntoMsg(msg, usernameB, index, username.length());
                 msg[index++] = '\0';
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
             case block: {
                 string username = input.at(1);
                 const char *usernameB = username.c_str();
-                char msg[2 + username.length() + 1];
+                char msg[2 + username.length() + 1 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(12, opcode);
                 index = copyIntoMsg(msg, opcode, index, 2);
                 index = copyIntoMsg(msg, usernameB, index, username.length());
                 msg[index++] = '\0';
+                msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
             }
