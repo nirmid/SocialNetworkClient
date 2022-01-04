@@ -28,10 +28,10 @@ string_opcode hashit(string const& s){
 }
 
 Encoder::Encoder(ConnectionHandler &connectionHandler_, bool &terminate_, mutex &mtx_, condition_variable &cv_)
-:connectionHandler(connectionHandler_) ,terminate(terminate_) ,mtx(mtx), cv(cv_){}
+:connectionHandler(connectionHandler_) ,terminate(terminate_) ,mtx(mtx_), cv(cv_){}
 
 void Encoder::operator()() {
-    while(!terminate) {
+    while (!terminate) {
         const short bufsize = 1024;
         char buf[bufsize];
         std::cin.getline(buf, bufsize);
@@ -45,9 +45,11 @@ void Encoder::operator()() {
             case register_: {
                 string username = input.at(1);
                 string password = input.at(2);
+                string date = input.at(3);
                 const char *usernameB = input.at(1).c_str();
                 const char *passwordB = input.at(2).c_str();
-                char msg[2 + username.length() + 1 + password.length() + 1+1];
+                const char *dateB = input.at(3).c_str();
+                char msg[2 + username.length() + 1 + password.length() + 1 + 1];
                 int index = 0;
                 char opcode[2];
                 shortToBytes(1, opcode);
@@ -56,6 +58,7 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 index = copyIntoMsg(msg, passwordB, index, password.length());
                 msg[index++] = '\0';
+                index = copyIntoMsg(msg, dateB, index, date.length());
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
                 break;
@@ -187,10 +190,10 @@ void Encoder::operator()() {
         }
         connectionHandler.close();
     }
-
-
-
 }
+
+
+
 
 void Encoder::shortToBytes(short num, char *bytesArr) {
     bytesArr[0] = ((num >> 8) & 0xFF);
@@ -201,6 +204,7 @@ int Encoder::copyIntoMsg(char *msg, const char *toCopy, int index, int length) {
     for(int i =0; i<length; i=i+1){
         msg[index++] = toCopy[i];
     }
+    return index;
 }
 
 std::string Encoder::getTime() {

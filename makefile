@@ -6,7 +6,7 @@ DEPS := $(patsubst %.o,%.d, $(OBJS))
 all: EchoClient
 	g++ -o bin/echo.elf bin/connectionHandler.o bin/echoClient.o bin/Encoder.o bin/decoder.o $(LDFLAGS)
 
-EchoClient: bin/connectionHandler.o bin/echoClient.o bin/Encoder.o bin/decoder.o
+EchoClient:  bin/Encoder.o bin/decoder.o bin/connectionHandler.o bin/echoClient.o
 
 bin/connectionHandler.o: src/connectionHandler.cpp
 	g++ $(CFLAGS) -o bin/connectionHandler.o src/connectionHandler.cpp

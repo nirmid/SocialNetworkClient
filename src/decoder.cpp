@@ -85,8 +85,8 @@ void decoder::operator()() {
             cout << status << " " << messageOpCode << endl;
 
         }
-        else
-            cout << "something went wrong"<< endl;
+        //else
+          //  cout << "something went wrong"<< endl;
     }
 }
 
