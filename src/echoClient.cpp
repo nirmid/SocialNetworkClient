@@ -2,6 +2,7 @@
 #include <thread>
 #include "../include/connectionHandler.h"
 #include "../include/Encoder.h"
+#include "../include/decoder.h"
 
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
@@ -25,11 +26,11 @@ int main (int argc, char *argv[]) {
     mutex mtx;
     condition_variable cv;
     Encoder encoder(connectionHandler,terminate,mtx,cv);
-    // enter decoder object
+    decoder dec(connectionHandler,mtx,terminate,cv);
     std::thread inputFromClient(std::ref(encoder));
-    // enter decoder thread constractor
+    std::thread decodeFromServer(std::ref(dec));
     inputFromClient.join();
-    // enter decoder thread
+    decodeFromServer.join();
 
 	/*
 	//From here we will see the rest of the ehco client implementation:
