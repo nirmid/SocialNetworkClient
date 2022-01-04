@@ -1,5 +1,7 @@
 #include <stdlib.h>
+#include <thread>
 #include "../include/connectionHandler.h"
+#include "../include/Encoder.h"
 
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
@@ -19,7 +21,17 @@ int main (int argc, char *argv[]) {
     }
 
 
-	
+    bool terminate = false;
+    mutex mtx;
+    condition_variable cv;
+    Encoder encoder(connectionHandler,terminate,mtx,cv);
+    // enter decoder object
+    std::thread inputFromClient(std::ref(encoder));
+    // enter decoder thread constractor
+    inputFromClient.join();
+    // enter decoder thread
+
+	/*
 	//From here we will see the rest of the ehco client implementation:
     while (1) {
         const short bufsize = 1024;
@@ -57,6 +69,7 @@ int main (int argc, char *argv[]) {
             break;
         }
     }
+    */
     return 0;
 }
 
