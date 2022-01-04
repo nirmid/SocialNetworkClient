@@ -1,5 +1,5 @@
 
-#include "../include/encoder.h"
+#include "../include/Encoder.h"
 using boost::asio::ip::tcp;
 
 using std::cin;
@@ -27,11 +27,15 @@ string_opcode hashit(string const& s){
 
 }
 
-encoder::encoder(ConnectionHandler &connectionHandler_, bool &terminate_, mutex &mtx_, condition_variable &cv_)
+Encoder::Encoder(ConnectionHandler &connectionHandler_, bool &terminate_, mutex &mtx_, condition_variable &cv_)
 :connectionHandler(connectionHandler_) ,terminate(terminate_) ,mtx(mtx), cv(cv_){}
 
-std::string encoder::encodeAndSend(std::string &line) {
+void Encoder::operator()() {
     while(!terminate) {
+        const short bufsize = 1024;
+        char buf[bufsize];
+        std::cin.getline(buf, bufsize);
+        std::string line(buf);
         vector<string> input;
         stringstream ss(line);
         string word;
@@ -178,13 +182,13 @@ std::string encoder::encodeAndSend(std::string &line) {
 
 }
 
-int encoder::copyIntoMsg(char *msg, const char *toCopy, int index, int length) {
+int Encoder::copyIntoMsg(char *msg, const char *toCopy, int index, int length) {
     for(int i =0; i<length; i=i+1){
         msg[index++] = toCopy[i];
     }
 }
 
-std::string encoder::getTime() {
+std::string Encoder::getTime() {
     time_t now = time(0);
     tm *ltm = localtime(&now);
     string year = to_string(1900+ltm->tm_year);

@@ -3,4 +3,4 @@ project(spl3Client)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(spl3Client main.cpp include/connectionHandler.h include/encoderDecoder.h src/connectionHandler.cpp src/echoClient.cpp src/encoderDecoder.cpp)
+add_executable(spl3Client main.cpp include/connectionHandler.h src/connectionHandler.cpp src/echoClient.cpp include/Encoder.h src/Encoder.cpp)

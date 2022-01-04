@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class encoder {
+class Encoder {
 private:
     ConnectionHandler &connectionHandler;
     bool& terminate;
@@ -21,8 +21,8 @@ private:
     int copyIntoMsg(char *msg, const char *toCopy, int index, int length);
 
 public:
-    encoder(ConnectionHandler& connectionHandler_, bool& terminate_, mutex& mtx_,condition_variable& cv_);
-    std::string encodeAndSend(std::string& line);
+    Encoder(ConnectionHandler& connectionHandler_, bool& terminate_, mutex& mtx_, condition_variable& cv_);
+    void operator()();
 
 
 
