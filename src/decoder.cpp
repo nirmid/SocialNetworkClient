@@ -12,14 +12,17 @@ decoder::decoder( ConnectionHandler &_handler, std:: mutex & _lock,bool & _shoul
 
 void decoder::operator()() {
     while (!shouldTerminate){
+        cout << "entered decode"<< endl;
         char firstBytes[2];
         short opCode = -1;
         short messageOpCode = -1;
         if(handler.getBytes(firstBytes,2))
             opCode = bytesToShort(firstBytes);
+        cout << "recieved opCode"<< endl;
         string status = "-1";
         string content = "";
         if (opCode == 10){
+            cout << "entered ACK message"<< endl;
             status = "ACK";
             if(handler.getBytes(firstBytes,2))
                 messageOpCode = bytesToShort(firstBytes);

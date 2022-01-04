@@ -41,7 +41,7 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 			tmp += socket_.read_some(boost::asio::buffer(bytes+tmp, bytesToRead-tmp), error);			
         }
 		if(error)
-			throw boost::system::system_error(error);
+            throw boost::system::system_error(error);
     } catch (std::exception& e) {
         std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
         return false;
