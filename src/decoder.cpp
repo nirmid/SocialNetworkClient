@@ -11,7 +11,7 @@ using namespace std;
 decoder::decoder( ConnectionHandler &_handler, std:: mutex & _lock,bool & _shouldTerminate, std::condition_variable & _conVar): handler(_handler), locker(_lock), shouldTerminate(_shouldTerminate) , conVar(_conVar) {}
 
 void decoder::operator()() {
-    while (!shouldTerminate){
+    //while (!shouldTerminate){
         cout << "entered decode"<< endl;
         char firstBytes[2];
         short opCode = -1;
@@ -90,7 +90,7 @@ void decoder::operator()() {
         }
         //else
           //  cout << "something went wrong"<< endl;
-    }
+    //}
 }
 
 short decoder:: bytesToShort(char* bytesArr)
