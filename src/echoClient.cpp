@@ -30,7 +30,8 @@ int main (int argc, char *argv[]) {
     std::thread inputFromClient(std::ref(encoder));
     std::thread decodeFromServer(std::ref(dec));
     inputFromClient.join();
-    decodeFromServer.join();
+    //decodeFromServer.join();
+    dec.operator()();
 
     return 0;
 }

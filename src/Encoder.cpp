@@ -188,8 +188,9 @@ void Encoder::operator()() {
             case null:
                 break;
         }
-        connectionHandler.close();
+
     }
+    connectionHandler.close();
 }
 
 
