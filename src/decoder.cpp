@@ -11,16 +11,17 @@ using namespace std;
 decoder::decoder( ConnectionHandler &_handler, std:: mutex & _lock,bool & _shouldTerminate, std::condition_variable & _conVar): handler(_handler), locker(_lock), shouldTerminate(_shouldTerminate) , conVar(_conVar) {}
 
 void decoder::operator()() {
-    //while (!shouldTerminate){
+    while (!shouldTerminate){
         cout << "entered decode"<< endl;
         char firstBytes[2];
         short opCode = -1;
         short messageOpCode = -1;
         if(handler.getBytes(firstBytes,2))
             opCode = bytesToShort(firstBytes);
-        cout << "recieved opCode"<< endl;
+        cout << "received opCode"<< endl;
         string status = "-1";
         string content = "";
+        string checker = "";
         if (opCode == 10){
             cout << "entered ACK message"<< endl;
             status = "ACK";
@@ -29,7 +30,8 @@ void decoder::operator()() {
             if (messageOpCode == 3){
                 unique_lock<mutex> lock(locker);
                 shouldTerminate = true;
-                conVar.notify_all();
+                conVar.notify_one();
+                handler.getLine(checker);
             }
             else if( messageOpCode == 7 || messageOpCode == 8) {
                 char check[1];
@@ -54,20 +56,22 @@ void decoder::operator()() {
                         }
                     }
                 } while (check[0] == '\0');
+                handler.getLine(checker);
             }
             else{
                 handler.getLine(content);
             }
             cout << status << " " << messageOpCode << content << endl;
+
         }
         else if(opCode == 9){
             status = "NOTIFICATION";
             if(handler.getBytes(firstBytes,1))
                 messageOpCode =  (short)(firstBytes[0] & 0xff);
             if (messageOpCode == 0)
-                content = "PM";
+                content = " PM";
             else if (messageOpCode == 1)
-                content = "post";
+                content = " post";
             string msg = "";
             handler.getLine(msg);
             int start = 0;
@@ -84,13 +88,14 @@ void decoder::operator()() {
             if(handler.getBytes(firstBytes,2))
                 messageOpCode = bytesToShort(firstBytes);
             if (messageOpCode == 3)
-                conVar.notify_all();
+                conVar.notify_one();
             cout << status << " " << messageOpCode << endl;
+            handler.getLine(content);
 
         }
-        //else
-          //  cout << "something went wrong"<< endl;
-    //}
+        else
+            cout << "something went wrong"<< endl;
+    }
 }
 
 short decoder:: bytesToShort(char* bytesArr)
