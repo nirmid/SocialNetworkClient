@@ -29,6 +29,7 @@ int main (int argc, char *argv[]) {
     decoder dec(connectionHandler,mtx,terminate,cv);
     std::thread inputFromClient(std::ref(encoder));
     std::thread decodeFromServer(std::ref(dec));
+
     inputFromClient.join();
     //decodeFromServer.join();
     dec.operator()();
