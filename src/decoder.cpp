@@ -70,9 +70,9 @@ void decoder::operator()() {
             char type ;
             if(handler.getBytes(&type,1)){}
             if (type == '0')
-                content = " PM";
+                content = "PM";
             else
-                content = " post";
+                content = "public";
             string msg = "";
             handler.getLine(msg);
             int start = 0;
