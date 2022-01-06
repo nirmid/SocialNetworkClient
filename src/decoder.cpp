@@ -66,11 +66,11 @@ void decoder::operator()() {
         }
         else if(opCode == 9){
             status = "NOTIFICATION";
-            if(handler.getBytes(firstBytes,1))
-                messageOpCode =  (short)(firstBytes[0] & 0xff);
-            if (messageOpCode == 0)
+            char type ;
+            if(handler.getBytes(&type,1)){}
+            if (type == '0')
                 content = " PM";
-            else if (messageOpCode == 1)
+            else
                 content = " post";
             string msg = "";
             handler.getLine(msg);
