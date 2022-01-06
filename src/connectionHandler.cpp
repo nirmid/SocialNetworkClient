@@ -83,7 +83,8 @@ bool ConnectionHandler::getFrameAscii(std::string& frame, char delimiter) {
     try {
 		do{
 			getBytes(&ch, 1);
-            frame.append(1, ch);
+            if (delimiter != ch)
+                frame.append(1, ch);
         }while (delimiter != ch);
     } catch (std::exception& e) {
         cout << "getFrameAscii ERROR"<< endl;

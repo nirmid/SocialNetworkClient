@@ -12,7 +12,6 @@ decoder::decoder( ConnectionHandler &_handler, std:: mutex & _lock,bool & _shoul
 
 void decoder::operator()() {
     while (!shouldTerminate){
-        cout << "entered decode"<< endl;
         char firstBytes[2];
         short opCode = -1;
         short messageOpCode = -1;
@@ -39,7 +38,10 @@ void decoder::operator()() {
                 if (handler.getBytes(statBytes, 8)) {
                     for (int i = 0; i < 8; i = i + 2) {
                         short stat = bytesToShort(&statBytes[i]);
-                        content = content + " " + to_string(stat);
+                        if (i == 0)
+                            content = content + to_string(stat);
+                        else
+                            content = content + " " + to_string(stat);
                     }
                     content = content + "\n";
                 }
@@ -47,21 +49,20 @@ void decoder::operator()() {
                     if (handler.getBytes(check, 1) && check[0] == '\0') {
                         char nextStat[12];
                         if (handler.getBytes(nextStat, 12)) {
-                            content = content + "ACk ";
-                            for (int i = 2; i < 12; i = i + 2) {
-                                short stat = bytesToShort(&statBytes[i]);
+                            content = content + "ACK " + to_string(messageOpCode);
+                            for (int i = 4; i < 12; i = i + 2) {
+                                short stat = bytesToShort(&nextStat[i]);
                                 content = content + " " + to_string(stat);
                             }
                             content = content + "\n";
                         }
                     }
                 } while (check[0] == '\0');
-                handler.getLine(checker);
             }
             else{
                 handler.getLine(content);
             }
-            cout << status << " " << messageOpCode << content << endl;
+            cout << status << " " << messageOpCode << " " << content << endl;
 
         }
         else if(opCode == 9){

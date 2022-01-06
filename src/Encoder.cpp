@@ -61,6 +61,9 @@ void Encoder::operator()() {
                 index = copyIntoMsg(msg, dateB, index, date.length());
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case login: {
@@ -81,6 +84,9 @@ void Encoder::operator()() {
                 msg[index++] = captcha[0];
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case logout: {
@@ -93,6 +99,9 @@ void Encoder::operator()() {
                 connectionHandler.sendBytes(msg, index);
                 unique_lock<mutex> uniqueLock(mtx);
                 cv.wait(uniqueLock);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case follow: {
@@ -109,10 +118,14 @@ void Encoder::operator()() {
                 index = copyIntoMsg(msg, usernameB, index, username.length());
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case post: {
-                string content = input.at(1);
+                string content = line.substr(2);
+                //string content = input.at(1);
                 const char *contentB = content.c_str();
                 char msg[2 + content.length() + 1 + 1];
                 int index = 0;
@@ -123,11 +136,14 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case PM: {
                 string username = input.at(1);
-                string content = input.at(2);
+                string content = line.substr(2+username.length()+1);
                 string date = getTime();
                 const char *usernameB = username.c_str();
                 const char *contentB = content.c_str();
@@ -145,6 +161,9 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case LOGSTAT: {
@@ -155,6 +174,9 @@ void Encoder::operator()() {
                 index = copyIntoMsg(msg, opcode, index, 2);
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case STAT: {
@@ -169,6 +191,9 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case block: {
@@ -183,6 +208,9 @@ void Encoder::operator()() {
                 msg[index++] = '\0';
                 msg[index++] = ';';
                 connectionHandler.sendBytes(msg, index);
+                for(int i=0;i<index;i=i+1){
+                    cout << msg[i] << endl;
+                }
                 break;
             }
             case null:
