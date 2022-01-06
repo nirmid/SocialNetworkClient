@@ -17,12 +17,10 @@ void decoder::operator()() {
         short messageOpCode = -1;
         if(handler.getBytes(firstBytes,2))
             opCode = bytesToShort(firstBytes);
-        cout << "received opCode"<< endl;
         string status = "-1";
         string content = "";
         string checker = "";
         if (opCode == 10){
-            cout << "entered ACK message"<< endl;
             status = "ACK";
             if(handler.getBytes(firstBytes,2))
                 messageOpCode = bytesToShort(firstBytes);
@@ -43,10 +41,10 @@ void decoder::operator()() {
                         else
                             content = content + " " + to_string(stat);
                     }
-                    content = content + "\n";
                 }
                 do {
                     if (handler.getBytes(check, 1) && check[0] == '\0') {
+                        content = content + "\n";
                         char nextStat[12];
                         if (handler.getBytes(nextStat, 12)) {
                             content = content + "ACK " + to_string(messageOpCode);
@@ -54,7 +52,6 @@ void decoder::operator()() {
                                 short stat = bytesToShort(&nextStat[i]);
                                 content = content + " " + to_string(stat);
                             }
-                            content = content + "\n";
                         }
                     }
                 } while (check[0] == '\0');
@@ -94,8 +91,10 @@ void decoder::operator()() {
             handler.getLine(content);
 
         }
-        else
-            cout << "something went wrong"<< endl;
+        else {
+            cout << "something went wrong" << endl;
+            handler.close();
+        }
     }
 }
 
