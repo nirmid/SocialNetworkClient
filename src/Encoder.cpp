@@ -124,7 +124,7 @@ void Encoder::operator()() {
                 break;
             }
             case post: {
-                string content = line.substr(2);
+                string content = line.substr(5);
                 //string content = input.at(1);
                 const char *contentB = content.c_str();
                 char msg[2 + content.length() + 1 + 1];
